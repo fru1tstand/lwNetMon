@@ -42,8 +42,8 @@ internal class FileBandwidthDatabaseTest {
   @Test
   fun addNextTick() {
     val db = createTestBandwidthDatabase()
-    val testDeltaRx = 300
-    val testDeltaTx = 400
+    val testDeltaRx = 300L
+    val testDeltaTx = 400L
 
     val resultRow = db.addNextTick(testDeltaRx, testDeltaTx)
 

@@ -42,7 +42,7 @@ class FileBandwidthDatabase(private val databaseFile: File) : BandwidthDatabase 
     }
   }
 
-  override fun addNextTick(deltaRxBytes: Int, deltaTxBytes: Int): Int {
+  override fun addNextTick(deltaRxBytes: Long, deltaTxBytes: Long): Int {
     databaseFile.appendText("${++currentIndex},$deltaRxBytes,$deltaTxBytes\n", Charsets.US_ASCII)
     return currentIndex
   }

@@ -9,5 +9,5 @@ interface BandwidthDatabase {
    *
    * @return the row id that is used as referenced internal to this database.
    */
-  fun addNextTick(deltaRxBytes: Int, deltaTxBytes: Int): Int
+  fun addNextTick(deltaRxBytes: Long, deltaTxBytes: Long): Int
 }
