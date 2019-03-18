@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
     return
   }
 
-  val xDb = FileBandwidthDatabase()
+  val xDb = FileBandwidthDatabase(File("bandwidth-database.db"))
 
   //             |   Receive                                                     |  Transmit
   // 1 interface |2bytes 3packets 4errs 5drop 6fifo 7frame 8compressed 9multicast|10bytes 11packets 12errs 13drop 14fifo 15colls 16carrier 17compressed
@@ -46,7 +46,11 @@ fun main(args: Array<String>) {
       deltaRx = (currentRx - lastRx)
       deltaTx = (currentTx - lastTx)
 
-      println("Drift: $loopTimeDrift, RX: " + toHumanReadableString(deltaRx) + ", TX: " + toHumanReadableString(deltaTx))
+      println(
+        "Drift: $loopTimeDrift, RX: "
+            + toHumanReadableString(deltaRx)
+            + ", TX: "
+            + toHumanReadableString(deltaTx))
       xDb.addNextTick(deltaRx, deltaTx)
 
       lastRx = currentRx

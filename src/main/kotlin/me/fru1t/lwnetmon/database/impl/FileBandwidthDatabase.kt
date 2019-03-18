@@ -6,21 +6,28 @@ import java.lang.IllegalStateException
 import java.util.regex.Pattern
 
 /** A flat file-based implementation of [BandwidthDatabase]. */
-class FileBandwidthDatabase : BandwidthDatabase {
+class FileBandwidthDatabase(private val databaseFile: File) : BandwidthDatabase {
   private companion object {
     val rowPattern = Pattern.compile("(\\d+),(\\d+),(\\d+)")!!
   }
 
-  private val file = File("bandwidth-database.db")
-  private var currentIndex = 1
+  private var currentIndex = 0
 
   init {
-    if (file.exists().not()) {
-      file.createNewFile()
+    if (databaseFile.isDirectory) {
+      throw IllegalArgumentException(
+        "FileBandwidthDatabase was supplied with a directory instead of a file: " +
+            databaseFile.absolutePath
+      )
+    }
+
+    if (!databaseFile.exists()) {
+      databaseFile.parentFile.mkdirs()
+      databaseFile.createNewFile()
     }
 
     var lastLine: String? = null
-    file.forEachLine(Charsets.US_ASCII) {
+    databaseFile.forEachLine(Charsets.US_ASCII) {
       lastLine = it
     }
 
@@ -36,7 +43,7 @@ class FileBandwidthDatabase : BandwidthDatabase {
   }
 
   override fun addNextTick(deltaRxBytes: Int, deltaTxBytes: Int): Int {
-    file.appendText("${++currentIndex},$deltaRxBytes,$deltaTxBytes\n", Charsets.US_ASCII)
+    databaseFile.appendText("${++currentIndex},$deltaRxBytes,$deltaTxBytes\n", Charsets.US_ASCII)
     return currentIndex
   }
 }
