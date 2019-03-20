@@ -26,6 +26,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    // Always run tests, even when nothing changed.
+    dependsOn 'cleanTest'
+
+    // Show results
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 compileKotlin {
